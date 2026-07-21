@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marginalia Reading Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Courier+Prime&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #f2ecdd;
+    --paper-dark: #e8dfc7;
+    --ink: #22303f;
+    --ink-soft: #4a5a6a;
+    --rule: #c9bfa5;
+    --stamp: #3f6659;
+    --stamp-dark: #2c4a41;
+    --gold: #b08d3f;
+    --error: #9b3d2e;
+    --card-shadow: 0 1px 0 var(--rule), 0 12px 24px -12px rgba(34,48,63,0.35);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(176,141,63,0.08), transparent 40%),
+      var(--paper-dark);
+    background-image:
+      repeating-linear-gradient(0deg, rgba(34,48,63,0.025) 0px, rgba(34,48,63,0.025) 1px, transparent 1px, transparent 26px),
+      radial-gradient(circle at 15% 10%, rgba(176,141,63,0.08), transparent 40%);
+    font-family: 'Source Serif 4', Georgia, serif;
+    color: var(--ink);
+    padding: 48px 16px 80px;
+    display:flex;
+    justify-content:center;
+  }
+
+  .catalog-card{
+    position:relative;
+    width:100%;
+    max-width: 620px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    box-shadow: var(--card-shadow);
+    padding: 44px 40px 40px;
+  }
+
+  .catalog-card::before{
+    content:"";
+    position:absolute;
+    top:0; left:56px;
+    width:1px; height:100%;
+    background: rgba(155,61,46,0.18);
+  }
+
+  .stamp{
+    position:absolute;
+    top:-18px; right:-14px;
+    width:104px; height:104px;
+    border-radius:50%;
+    border:3px double var(--stamp);
+    color: var(--stamp-dark);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    transform: rotate(9deg);
+    font-family:'Special Elite', 'Courier Prime', monospace;
+    font-size:11px;
+    line-height:1.35;
+    letter-spacing:0.5px;
+    background: rgba(63,102,89,0.05);
+    mix-blend-mode: multiply;
+    pointer-events:none;
+  }
+
+  .card-head{
+    padding-left: 24px;
+    margin-bottom: 6px;
+  }
+
+  .eyebrow{
+    font-family:'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--stamp-dark);
+    margin: 0 0 10px;
+  }
+
+  h1#title{
+    font-family:'Special Elite', monospace;
+    font-weight: 400;
+    font-size: clamp(26px, 4vw, 32px);
+    letter-spacing: 0.5px;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  p#description{
+    padding-left:24px;
+    margin: 0 0 30px;
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 46ch;
+  }
+
+  form#survey-form{
+    padding-left: 24px;
+  }
+
+  fieldset{
+    border: none;
+    padding: 0;
+    margin: 0 0 26px;
+  }
+
+  .field{
+    margin-bottom: 22px;
+  }
+
+  label{
+    display:block;
+    font-family:'Special Elite', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  label .req{
+    color: var(--error);
+    margin-left: 3px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  select,
+  textarea{
+    width: 100%;
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    color: var(--ink);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--rule);
+    padding: 8px 2px;
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  input::placeholder, textarea::placeholder{
+    color: #9a9280;
+    font-style: italic;
+  }
+
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  button:focus-visible{
+    border-color: var(--gold);
+    background: rgba(176,141,63,0.06);
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  input:invalid:not(:placeholder-shown){
+    border-color: var(--error);
+  }
+
+  select{
+    border: 1px solid var(--rule);
+    padding: 9px 10px;
+    background: var(--paper);
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--ink-soft) 50%), linear-gradient(135deg, var(--ink-soft) 50%, transparent 50%);
+    background-position: calc(100% - 18px) center, calc(100% - 13px) center;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+  }
+
+  textarea{
+    border: 1px solid var(--rule);
+    padding: 10px;
+    min-height: 96px;
+    resize: vertical;
+  }
+
+  .row-group{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+  }
+
+  .choice{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  .choice input[type="radio"],
+  .choice input[type="checkbox"]{
+    width: 16px;
+    height: 16px;
+    accent-color: var(--stamp);
+    margin: 0;
+  }
+
+  .hint{
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  .divider{
+    border: none;
+    border-top: 1px dashed var(--rule);
+    margin: 30px 0 26px;
+  }
+
+  button#submit{
+    font-family:'Special Elite', monospace;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: var(--stamp-dark);
+    border: none;
+    padding: 13px 30px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+
+  button#submit:hover{
+    background: var(--stamp);
+  }
+
+  button#submit:active{
+    transform: translateY(1px);
+  }
+
+  .card-footer{
+    margin-top: 30px;
+    padding-left: 2px;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    font-family:'Special Elite', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 480px){
+    .catalog-card{ padding: 36px 22px 30px; }
+    .catalog-card::before{ left: 20px; }
+    .card-head, p#description, form#survey-form{ padding-left: 0; }
+    .stamp{ width: 84px; height: 84px; font-size: 9.5px; top:-14px; right:-10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<main class="catalog-card">
+  <div class="stamp" aria-hidden="true">MARGINALIA<br>READING<br>SURVEY</div>
+
+  <div class="card-head">
+    <p class="eyebrow">Catalog card &middot; readers' desk</p>
+    <h1 id="title">Marginalia Reading Survey</h1>
+  </div>
+
+  <p id="description">A two-minute card for regular readers — it helps us stock the right shelves and plan better events at the shop.</p>
+
+  <form id="survey-form" novalidate>
+
+    <div class="field">
+      <label id="name-label" for="name">Full name <span class="req">*</span></label>
+      <input type="text" id="name" name="name" placeholder="e.g. Jordan Ellis" required>
+    </div>
+
+    <div class="field">
+      <label id="email-label" for="email">Email address <span class="req">*</span></label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required>
+    </div>
+
+    <div class="field">
+      <label id="number-label" for="number">Books read last year</label>
+      <input type="number" id="number" name="number" placeholder="e.g. 24" min="0" max="365">
+      <p class="hint">Whole numbers only, between 0 and 365.</p>
+    </div>
+
+    <div class="field">
+      <label for="dropdown">How often do you visit the shop?</label>
+      <select id="dropdown" name="visit-frequency">
+        <option value="" disabled selected>Choose one</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+        <option value="few-times-year">A few times a year</option>
+        <option value="first-visit">This is my first visit</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Preferred format</label>
+      <div class="row-group">
+        <span class="choice">
+          <input type="radio" id="format-physical" name="format" value="physical" checked>
+          <label for="format-physical" style="text-transform:none;font-family:'Source Serif 4',serif;letter-spacing:normal;font-size:15px;margin:0;">Physical books</label>
+        </span>
+        <span class="choice">
+          <input type="radio" id="format-ebook" name="format" value="ebook">
+          <label for="format-ebook" style="text-transform:none;font-family:'Source Serif 4',serif;letter-spacing:normal;font-size:15px;margin:0;">E-books</label>
+        </span>
+        <span class="choice">
+          <input type="radio" id="format-audio" name="format" value="audiobook">
+          <label for="format-audio" style="text-transform:none;font-family:'Source Serif 4',serif;letter-spacing:normal;font-size:15px;margin:0;">Audiobooks</label>
+        </span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Genres you'd like to see more of</label>
+      <div class="row-group">
+        <span class="choice">
+          <input type="checkbox" id="genre-fiction" name="genres" value="fiction">
+          <label for="genre-fiction" style="text-transform:none;font-family:'Source Serif 4',serif;letter-spacing:normal;font-size:15px;margin:0;">Fiction</label>
+        </span>
+        <span class="choice">
+          <input type="checkbox" id="genre-nonfiction" name="genres" value="nonfiction">
+          <label for="genre-nonfiction" style="text-transform:none;font-family:'Source Serif 4',serif;letter-spacing:normal;font-size:15px;margin:0;">Nonfiction</label>
+        </span>
+        <span class="choice">
+          <input type="checkbox" id="genre-poetry" name="genres" value="poetry">
+          <label for="genre-poetry" style="text-transform:none;font-family:'Source Serif 4',serif;letter-spacing:normal;font-size:15px;margin:0;">Poetry</label>
+        </span>
+        <span class="choice">
+          <input type="checkbox" id="genre-mystery" name="genres" value="mystery">
+          <label for="genre-mystery" style="text-transform:none;font-family:'Source Serif 4',serif;letter-spacing:normal;font-size:15px;margin:0;">Mystery</label>
+        </span>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="field">
+      <label for="comments">Notes for the shelf</label>
+      <textarea id="comments" name="comments" placeholder="Anything else you'd like us to know — favorite authors, requests, events you'd attend..."></textarea>
+    </div>
+
+    <button type="submit" id="submit">File this card</button>
+
+    <p class="card-footer">Card No. 042 &middot; Marginalia Books, Reader Services Desk</p>
+  </form>
+</main>
+
+</body>
+</html>
